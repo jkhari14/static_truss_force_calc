@@ -1,27 +1,4 @@
 // GET JS MATRIX DATA
-var a = JSMatrix.Vector.create([1, 2, 3]);
-
-/******************* PUT EVERYTHING IN ONE BIG FUNCTION AND USE EVENT LISTENERS TO CALL SUBROUTINES *********************/
-
-/*
-// ** Gathering Inputs: create inputs and store values in arrays to pull from
-
-var angles = []; // vector sized by # of members, each element is a member's angle
-var text_vector = [];
-var member_names = [];
-var number = 0; // number of members
-var ff = 1; // incremnter (why is it 1?)
-
-var joint_text_vector = [];
-var joints = []; 
-var jj = 1; // incremnter (why is it 1?)
-
-var appliedForces = [];
-var aF = 1; // incremnter (why is it 1?)
-var hmfExecuted = false;
-// forces will increase drop down options for joints, joints will use drop downs to select forces they
-*/
-
 function execute(){
     var angles = []; // vector sized by # of members, each element is a member's angle
     var member_names = [];
@@ -30,15 +7,13 @@ function execute(){
     var joints = [];
     var number_j = 0; 
 
-    // var appliedForces = [];
-
     howManyForces(number, member_names, angles, joints, number_j); // functions are nested to make sure variables mutate
 }
 
 function howManyForces(number, member_names, angles, joints, number_j) {
     // Number of inputs to create
     number = document.getElementById("forces").value;
-    if (number == 0 || number == ''){
+    if (number <= 0 || number == ''){
         alert('Input a number of Members/Reactions greater than 0');
         return;
     }
@@ -62,7 +37,7 @@ function howManyForces(number, member_names, angles, joints, number_j) {
         container.appendChild(document.createElement("br"));
     }
     document.getElementById('memberButton2').addEventListener('click', function() { submitForces(number, member_names, angles, joints, number_j);
-    }, false); // watch what happens to the values called in the event listener
+    }, false); 
 }
 
 /** make a function called submitForces() that responds to the submit button under the members section:
@@ -81,13 +56,13 @@ function submitForces(number, member_names, angles, joints, number_j){
     for (i=0;i<number;i++){ 
         var value = document.getElementById(member_names[i]).value;
         if (value == "") { // checked!
-            document.getElementById('memberButton2').style.backgroundColor = "gray";
+           // document.getElementById('memberButton2').style.backgroundColor = "gray";
             angles = [];
             alert('One of your fields are empty'); // doesnt show up
             return; //break instead?
         }
         if ( (isNaN(value)) || (value < 0) || (value > 180) ){ // checked!
-            document.getElementById('memberButton2').style.backgroundColor = "gray";
+            // document.getElementById('memberButton2').style.backgroundColor = "gray";
             angles = [];
             alert('Please Input a positive number between 0-180'); // doesnt show up
             return;
@@ -102,6 +77,10 @@ function howManyJoints(number_j, number, joints, angles){
     // DO NOT EXECUTE UNLESS MEMBERS HAVE BEEN SUBMITTED
     // Number of inputs to create
     number_j = document.getElementById("joints").value;
+    if (number_j <= 0 || number_j == ''){
+        alert('Input a number of Joints greater than 0');
+        return;
+    }
     // Container <div> where dynamic content will be placed
     var container = document.getElementById("jointFormContainer");
     // Clear previous contents of the container
@@ -111,12 +90,22 @@ function howManyJoints(number_j, number, joints, angles){
     for (i=0;i<number_j;i++){
         // joint_text_vector.push("Joint " + (i+1)); //save text_node value in text_vector
         // Append a node with a random text
-        container.appendChild(document.createTextNode("Joint " + (i+1)));
+        var bold = document.createElement('strong');
+        var jointbold = document.createTextNode("Joint " + (i+1))
+        bold.appendChild(jointbold);
+        container.appendChild(bold);
+        container.appendChild(document.createElement("br"));
         // Create an array of checkbox <input> elements, set type, id attributes
         for (j=0;j<number;j++){
             var input = document.createElement("input");
             input.type = "checkbox";
             input.id = "joint" + i + "member" + j;
+
+            var newlabel = document.createElement("Label");
+            newlabel.setAttribute("for", input.id);
+            newlabel.innerHTML = "Member " + (j+1);
+            container.appendChild(newlabel); 
+
             container.appendChild(input);
         }
         joints.push("joint" + i); //save joint names in joints vector
@@ -195,7 +184,7 @@ function dotProduct(connectionRow, angleRow){
     return newRow;
 }
 
-function cosD(anglesVector){ // this function changes variables it shouldn't be
+function cosD(anglesVector){ 
     for (e = 0; e<anglesVector.size(); e++){ // convert degrees to radians
         anglesVector.set(e, (anglesVector.get(e) * (Math.PI/180)));
         anglesVector.set(e, Math.cos(anglesVector.get(e))); //get cos value for each radian
@@ -230,14 +219,13 @@ function eqnSolver(connection, angles, number_j, number){
         }
     }
     var A = new JSMatrix.Matrix(number_j*2, number);
-    var angles_vector = JSMatrix.Vector.create(angles); // may need to use angles to create matrix or vector
+    var angles_vector = JSMatrix.Vector.create(angles); 
     var aF = getAppliedForces(number_j);
     var aF_Vector = JSMatrix.Vector.create(aF);
     for (i = 0; i<number_j; i++){
         for (j = 0; j<2; j++){ 
             var row_num = (2*i)+j;
             if (j == 0) {
-                // copy "A" actions here
                 var new_angles_vector = new JSMatrix.Vector(angles_vector.size());
                 for (e = 0; e<angles_vector.size(); e++){
                     new_angles_vector.set(e, angles_vector.get(e));
@@ -246,7 +234,6 @@ function eqnSolver(connection, angles, number_j, number){
                 A.setRow(row_num, newRow);
             }
             else {
-                // copy "A" actions here
                 var new_angles_vector_b = new JSMatrix.Vector(angles_vector.size());
                 for (e = 0; e<angles_vector.size(); e++){
                     new_angles_vector_b.set(e, angles_vector.get(e));
@@ -274,10 +261,7 @@ function inputDefaultValues(){
     document.getElementById('defaultValues').style.backgroundColor = "blue";
     document.getElementById('memberButton2').style.backgroundColor = "blue";
     document.getElementById('jointButton2').style.backgroundColor = "blue";
-    document.getElementById('memberButton').style.backgroundColor = "blue";
-    document.getElementById('jointButton').style.backgroundColor = "blue";
-    document.getElementById('appliedForceButton').style.backgroundColor = "blue";
-
+    
     var container1 = document.getElementById('memberFormContainer');
     var container2 = document.getElementById('jointFormContainer');
     var container3 = document.getElementById('appliedForceContainer');
@@ -287,24 +271,16 @@ function inputDefaultValues(){
     var aF = [0, -8829, 0, 0, 0, 0, 0, 0];
 
 
-    if (container3.childElementCount > 1){
-        while (container3.hasChildNodes()) { // make sure not to remove the original child: use if-statement
-            container3.removeChild(container3.lastChild);
-        }
+    while (container3.hasChildNodes()) { 
+        container3.removeChild(container3.lastChild);
     }
-
-
-    if (container2.childElementCount > 2){
-        while (container2.hasChildNodes()) { // make sure not to remove the original child: use if-statement
-            container2.removeChild(container2.lastChild);
-        }
+    while (container2.hasChildNodes()) { 
+        container2.removeChild(container2.lastChild);
+    }
+    while (container1.hasChildNodes()) { 
+        container1.removeChild(container1.lastChild);
     }
     
-    if (container1.childElementCount > 2){
-        while (container1.hasChildNodes()) { // make sure not to remove the original child: use if-statement
-            container1.removeChild(container1.lastChild);
-        }
-    }
 
     // fill Members
     for (i=0;i<8;i++){
@@ -324,7 +300,11 @@ function inputDefaultValues(){
     for (i=0;i<4;i++){
         // joint_text_vector.push("Joint " + (i+1)); //save text_node value in text_vector
         // Append a node with a random text
-        container2.appendChild(document.createTextNode("Joint " + (i+1)));
+        var bold = document.createElement('strong');
+        var jointbold = document.createTextNode("Joint " + (i+1))
+        bold.appendChild(jointbold);
+        container2.appendChild(bold);
+        container2.appendChild(document.createElement("br"));
         // Create an array of checkbox <input> elements, set type, id attributes
         for (j=0;j<8;j++){
             var input2 = document.createElement("input");
@@ -333,6 +313,12 @@ function inputDefaultValues(){
             if (connection[i][j] == 1){
                 input2.checked = true;
             }
+
+            var newlabel = document.createElement("Label");
+            newlabel.setAttribute("for", input2.id);
+            newlabel.innerHTML = "Member " + (j+1);
+            container2.appendChild(newlabel); 
+
             container2.appendChild(input2);
         }
         // Append a line break 
