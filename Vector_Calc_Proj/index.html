@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Static Frame Force Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="vector_calc_style.css">
+</head>
+
+    <style type="text/css"> 
+        div { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        } 
+          
+        input { 
+            margin-top: 10px; 
+        } 
+          
+        textarea { 
+            margin-top: 15px; 
+            width: 70%; 
+        } 
+    </style> 
+    
+
+
+<body>
+    <div class="main">
+        <h1> Static: Truss Force Distribution Calculator </h1>
+       <form id="form" action="index.html" method="POST" onsubmit="return false">
+           <div id="allTheForms" class="allTheForms">
+                <label id="memberLabel">Members/Reactions</label> <!-- put div around-->
+                <div id= "memberFormContainer" class="memberFormContainer">
+                        <input type="number" name="forces" id="forces"> 
+                        <button id="memberButton" onclick="execute()">Enter # of Members</button>
+                </div>
+                <button id="memberButton2">Input Member/Reaction Angles</button>
+
+                <br>
+                <!--<input type="submit" id="memberSubmit" value="Submit Members">-->
+                <label>Joints</label>
+                <div id="jointFormContainer" class="jointFormContainer"> 
+                        <input type="number" name="joints" id="joints">
+                        <button id="jointButton">Enter # of Joints</button>
+                </div>
+                <button id="jointButton2">Input Joint Connections</button>
+
+                <br>
+                <!--<input type="submit" id="jointSubmit" value="Submit Joints">-->
+                <label>Applied Forces</label> 
+                <div id="appliedForceContainer" class="appliedForceContainer">
+                        <button id="appliedForceButton">Enter Applied Forces</button>
+                </div>
+                <button id="calculate"> Calculate </button>
+
+                <br>
+                <!--<input type="submit" id="finalSubmit" value="Submit Applied Forces">-->
+            </div>
+            <button onclick="window.location.reload();">Reset Truss</button>
+            <button id="defaultValues" onclick="inputDefaultValues();">Input Default Values</button>
+       </form>
+       <br>
+       <br>
+       <label>Forces in Each Member/Reaction</label>
+       <div id="answersContainer" class="answersContainer">
+
+       </div>
+    </div>
+    <script src="jsmatrix.src.js"></script> 
+    <script src="vector_calc.js"></script>
+</body>
+</html>

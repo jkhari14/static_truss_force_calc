@@ -1,0 +1,15 @@
+.memberFormContainer, .appliedForceFormContainer, .allTheForms, .jointFormContainer{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-width: 120px;
+}
+
+.answersContainer{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column; 
+    min-width: 55%;
+    min-height: 60px;
+}
