@@ -13,3 +13,7 @@
     min-width: 55%;
     min-height: 60px;
 }
+
+label{
+    text-align: right;
+}
